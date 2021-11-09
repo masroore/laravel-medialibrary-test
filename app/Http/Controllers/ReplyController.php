@@ -51,7 +51,7 @@ class ReplyController extends Controller
 
     public function upload(Request $request)
     {
-        $path = storage_path('tmp/uploads');
+        $path = storage_path('tmp');
 
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
