@@ -10,6 +10,9 @@ class MediaController extends Controller
     {
         $media = Media::findByUuid($uuid);
         $media->delete();
-        return response()->noContent(204);
+
+        return response()->json([
+            'success' => 'Media has been deleted successfully!',
+        ]);
     }
 }

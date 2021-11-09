@@ -10,6 +10,7 @@ class ReplyController extends Controller
     public function index()
     {
         $replies = Reply::all();
+
         return view('index', compact('replies'));
     }
 
@@ -74,6 +75,7 @@ class ReplyController extends Controller
         $reply->delete();
 
         session()->flash('message', 'Deleted');
+
         return redirect()->route('reply.index');
     }
 }

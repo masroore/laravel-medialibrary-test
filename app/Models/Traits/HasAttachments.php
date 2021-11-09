@@ -17,7 +17,7 @@ trait HasAttachments
         return 'document_file.' . $this->id;
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->fit('crop', 50, 50)
@@ -36,6 +36,7 @@ trait HasAttachments
             $item->thumbnail = $item->getUrl('thumb');
             $item->preview = $item->getUrl('preview');
         });
+
         return $files;
     }
 
@@ -47,6 +48,7 @@ trait HasAttachments
                 return true;
             }
         }
+
         return false;
     }
 }

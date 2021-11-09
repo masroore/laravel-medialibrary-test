@@ -5,17 +5,27 @@
         <table class="table table-borderless table-responsive">
             <tbody>
             @foreach($reply->attachments as $media)
-                <tr>
+                <tr id="media_{{ $media->id }}">
                     <td>
                         <a href="{{ $media->url }}" target="_blank"><img src="{{ $media->preview }}" alt=""></a>
                     </td>
+                <!--
                     <td>
                         <form action="{{ route('media.destroy', $media->uuid) }}" method="POST"
                               onsubmit="return confirm('Are you sure?');" style="display: inline-block;">
                             @csrf
-                            @method('DELETE')
-                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                        </form>
+                @method('DELETE')
+                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                </form>
+            </td>
+-->
+
+                    <td>
+                        <a href="javascript:void(0)"
+                           data-elem="{{ $media->id }}"
+                           data-id="{{ $media->uuid }}"
+                           data-token="{{ csrf_token() }}"
+                           class="btn btn-danger delete-media">Delete</a>
                     </td>
                 </tr>
 
@@ -65,64 +75,7 @@
 @endsection
 
 @section('scripts')
-    <script>
-        Dropzone.options.documentFileDropzone = {
-            url: '{{ route('reply.upload') }}',
-            maxFilesize: 2, // MB
-            maxFiles: 10,
-            addRemoveLinks: true,
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
-            params: {
-                size: 2
-            },
-            success: function (file, response) {
-                $('form').append('<input type="hidden" name="document_file[]" value="' + response.name + '">')
-                uploadedDocumentMap[file.name] = response.name
-            },
-            removedfile: function (file) {
-                file.previewElement.remove()
-                var name = ''
-                if (typeof file.file_name !== 'undefined') {
-                    name = file.file_name
-                } else {
-                    name = uploadedDocumentMap[file.name]
-                }
-                $('form').find('input[name="document_file[]"][value="' + name + '"]').remove()
-            },
-            init: function () {
-                @if(isset($reply) && $reply->document_file)
-                var files = {!! json_encode($reply->document_file) !!}
-                for(
-                var i
-            in
-                files
-            )
-                {
-                    var file = files[i]
-                    this.options.addedfile.call(this, file)
-                    file.previewElement.classList.add('dz-complete')
-                    $('form').append('<input type="hidden" name="document_file[]" value="' + file.file_name + '">')
-                }
-                @endif
-            },
-            error: function (file, response) {
-                if ($.type(response) === 'string') {
-                    var message = response //dropzone sends it's own error messages in string
-                } else {
-                    var message = response.errors.file
-                }
-                file.previewElement.classList.add('dz-error')
-                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-                _results = []
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                    node = _ref[_i]
-                    _results.push(node.textContent = message)
-                }
-
-                return _results
-            }
-        }
-    </script>
+    @include('_script-setup')
+    <script src="{{ asset('js/media-delete.js') }}"></script>
+    <script src="{{ asset('js/dropz.js') }}"></script>
 @stop

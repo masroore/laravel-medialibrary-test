@@ -13,6 +13,6 @@ class Reply extends Model implements HasMedia
     use HasAttachments;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 }

@@ -34,6 +34,6 @@
             </tbody>
         </table>
 
-        <a href="{{ route('reply.create') }}">Create</a>
+        <a href="{{ route('reply.create') }}" class="btn btn-primary">Create</a>
     </div>
 @endsection
