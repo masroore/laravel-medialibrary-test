@@ -48,9 +48,6 @@
                         {{ $errors->first('name') }}
                     </p>
                 @endif
-                <p class="helper-block">
-                    Name
-                </p>
             </div>
 
             <div class="form-group {{ $errors->has('document_file') ? 'has-error' : '' }}">
