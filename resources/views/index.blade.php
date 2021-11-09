@@ -14,7 +14,7 @@
                     <td>{{ $reply->name }}</td>
                     <td>
                         @foreach($reply->attachments as $file)
-                            <a href="{{ $file->getUrl() }}" target="_blank">{{ $file('thumb') }}</a>
+                            <a href="{{ $file->getUrl() }}" target="_blank"><img src="{{ $file->thumbnail }}" alt=""></a>
                         @endforeach
                     </td>
                     <td>

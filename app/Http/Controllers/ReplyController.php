@@ -18,7 +18,7 @@ class ReplyController extends Controller
         $reply = Reply::create($request->validate(['name' => 'required']));
 
         foreach ($request->input('document_file', []) as $file) {
-            $reply->addMedia(storage_path('tmp/uploads/' . $file))
+            $reply->addMedia(storage_path('tmp/' . $file))
                 ->toMediaCollection($reply->media_collection);
         }
 
@@ -40,7 +40,7 @@ class ReplyController extends Controller
         $reply->update($request->validate(['name' => 'required']));
         if ($request->input('document_file', [])) {
             if (!$reply->document_file || $request->input('document_file') !== $reply->document_file->file_name) {
-                $reply->addMedia(storage_path('tmp/uploads/' . $request->input('document_file')))->toMediaCollection($reply->media_collection);
+                $reply->addMedia(storage_path('tmp/' . $request->input('document_file')))->toMediaCollection($reply->media_collection);
             }
         } elseif ($reply->document_file) {
             $reply->document_file->delete();
