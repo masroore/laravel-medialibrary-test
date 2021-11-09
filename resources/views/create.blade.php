@@ -10,9 +10,6 @@
                 <input type="text" id="name" name="name">
             </div>
 
-
-            {{-- Name/Description fields, irrelevant for this article --}}
-
             <div class="form-group">
                 <label for="document_file">Documents</label>
                 <div class="needsclick dropzone" id="document_file-dropzone"></div>
@@ -60,6 +57,22 @@
                     $('form').append('<input type="hidden" name="document_file[]" value="' + file.file_name + '">')
                 }
                 @endif
+            },
+            error: function (file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
             }
         }
     </script>

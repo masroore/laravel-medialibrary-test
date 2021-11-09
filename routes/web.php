@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ReplyController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,5 @@ Route::group(['as' => 'reply.', 'prefix' => 'reply'], function () {
     Route::delete('/{reply}', [ReplyController::class, 'destroy'])->name('destroy');
     */
 });
+
+Route::delete('/media/{uuid}', MediaController::class)->name('media.destroy');

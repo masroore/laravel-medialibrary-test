@@ -19,7 +19,7 @@ class ReplyController extends Controller
 
         foreach ($request->input('document_file', []) as $file) {
             $reply->addMedia(storage_path('tmp/' . $file))
-                ->toMediaCollection($reply->media_collection);
+                ->toMediaCollection($reply->media_collection_name);
         }
 
         return redirect()->route('reply.index');
@@ -30,20 +30,19 @@ class ReplyController extends Controller
         return view('create');
     }
 
-    public function edit()
+    public function edit(Reply $reply)
     {
-        return view('edit');
+        return view('edit', compact('reply'));
     }
 
     public function update(Request $request, Reply $reply)
     {
         $reply->update($request->validate(['name' => 'required']));
-        if ($request->input('document_file', [])) {
-            if (!$reply->document_file || $request->input('document_file') !== $reply->document_file->file_name) {
-                $reply->addMedia(storage_path('tmp/' . $request->input('document_file')))->toMediaCollection($reply->media_collection);
+        foreach ($request->input('document_file', []) as $file) {
+            if (!$reply->attachmentExists($file)) {
+                $reply->addMedia(storage_path('tmp/' . $file))
+                    ->toMediaCollection($reply->media_collection_name);
             }
-        } elseif ($reply->document_file) {
-            $reply->document_file->delete();
         }
 
         return redirect()->route('reply.index');
@@ -71,7 +70,7 @@ class ReplyController extends Controller
 
     public function destroy(Reply $reply)
     {
-        $reply->clearMediaCollection($reply->media_collection);
+        $reply->clearMediaCollection($reply->media_collection_name);
         $reply->delete();
 
         session()->flash('message', 'Deleted');
