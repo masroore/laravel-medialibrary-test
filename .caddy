@@ -1,0 +1,17 @@
+localhost
+{
+	root ./public
+
+	log ./storage/logs/caddy-access.log
+
+	errors ./storage/logs/caddy-error.log
+
+	on startup "C:\php\php-cgi.exe" -b 6565 &
+	
+	fastcgi / 127.0.0.1:6565 php
+
+	rewrite {
+		to {path} {path}/ /index.php?{query}
+	}
+
+}
